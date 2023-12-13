@@ -1,0 +1,14 @@
+{
+  "hash": "e94a919553662082291f1c8af541b02a",
+  "result": {
+    "markdown": "---\ntitle: \"Post With Code\"\nauthor: \"Surya Vadham\"\ndate: \"2023-12-06\"\ncategories: [news, code, analysis]\nimage: \"image.jpg\"\n---\n\n\n***`The provided R code loads the mtcars data set and conducts a linear regression analysis to predict miles per gallon (mpg) based on the independent variables of weight (wt), horsepower (hp), and quarter-mile time (qsec). The resulting regression model is stored in the variable model. The summary of the model, generated using the summary function, offers detailed information on coefficients, standard errors, t-values, and p-values, providing insights into the relationships between the predictor variables and the target variable. This summary aids in interpreting the significance of each predictor in explaining the variation in miles per gallon in the context of the dataset.`***\n\n\n::: {.cell}\n\n```{.r .cell-code}\n# Load the mtcars dataset (if not already loaded)\ndata(mtcars)\n\n# Perform linear regression (e.g., predicting mpg based on other variables)\nmodel <- lm(mpg ~ wt + hp + qsec, data = mtcars)\n\n# Display the summary of the regression model\nsummary(model)\n```\n\n::: {.cell-output .cell-output-stdout}\n```\n\nCall:\nlm(formula = mpg ~ wt + hp + qsec, data = mtcars)\n\nResiduals:\n    Min      1Q  Median      3Q     Max \n-3.8591 -1.6418 -0.4636  1.1940  5.6092 \n\nCoefficients:\n            Estimate Std. Error t value Pr(>|t|)    \n(Intercept) 27.61053    8.41993   3.279  0.00278 ** \nwt          -4.35880    0.75270  -5.791 3.22e-06 ***\nhp          -0.01782    0.01498  -1.190  0.24418    \nqsec         0.51083    0.43922   1.163  0.25463    \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 2.578 on 28 degrees of freedom\nMultiple R-squared:  0.8348,\tAdjusted R-squared:  0.8171 \nF-statistic: 47.15 on 3 and 28 DF,  p-value: 4.506e-11\n```\n:::\n:::\n\n\n***`The linear regression analysis reveals a significant relationship between the predictor variables (weight, horsepower, and quarter-mile time) and the target variable (miles per gallon). The model suggests that weight has a substantial negative impact on mpg, while there is no statistically significant effect from horsepower and quarter-mile time. The overall model is highly significant (p-value: 4.506e-11) with a strong explanatory power (Adjusted R-squared: 0.8171), indicating that the chosen variables collectively account for a significant portion of the variance in miles per gallon in the mtcars dataset.`***\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

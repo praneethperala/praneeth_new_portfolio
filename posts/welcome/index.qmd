@@ -1,0 +1,10 @@
+---
+title: "Welcome To My Blog"
+author: "Sai manikanta praneeth perala"
+date: "2023-12-03"
+categories: [news]
+---
+
+This is the first post in my blog projects. Welcome!
+
+![](/images/sa.jpg)

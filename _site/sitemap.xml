@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://www.myblogexample.io/posts/post-with-code/index.html</loc>
+    <lastmod>2023-12-06T13:44:57.790Z</lastmod>
+  </url>
+  <url>
+    <loc>https://www.myblogexample.io/index.html</loc>
+    <lastmod>2023-12-13T09:12:31.764Z</lastmod>
+  </url>
+  <url>
+    <loc>https://www.myblogexample.io/resume.html</loc>
+    <lastmod>2023-12-13T09:12:47.012Z</lastmod>
+  </url>
+  <url>
+    <loc>https://www.myblogexample.io/projects.html</loc>
+    <lastmod>2023-12-13T09:12:44.827Z</lastmod>
+  </url>
+  <url>
+    <loc>https://www.myblogexample.io/posts/post with plot/index.html</loc>
+    <lastmod>2023-12-13T09:06:59.149Z</lastmod>
+  </url>
+  <url>
+    <loc>https://www.myblogexample.io/posts/welcome/index.html</loc>
+    <lastmod>2023-12-09T11:45:05.035Z</lastmod>
+  </url>
+  <url>
+    <loc>https://www.myblogexample.io/posts/post with code/index.html</loc>
+    <lastmod>2023-12-13T09:06:12.870Z</lastmod>
+  </url>
+  <url>
+    <loc>https://www.myblogexample.io/posts/final project/index.html</loc>
+    <lastmod>2023-12-13T09:06:19.076Z</lastmod>
+  </url>
+</urlset>

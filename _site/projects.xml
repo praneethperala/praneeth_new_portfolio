@@ -1,0 +1,1590 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss  xmlns:atom="http://www.w3.org/2005/Atom" 
+      xmlns:media="http://search.yahoo.com/mrss/" 
+      xmlns:content="http://purl.org/rss/1.0/modules/content/" 
+      xmlns:dc="http://purl.org/dc/elements/1.1/" 
+      version="2.0">
+<channel>
+<title>Sai manikanta praneeth perala</title>
+<link>https://www.myblogexample.io/projects.html</link>
+<atom:link href="https://www.myblogexample.io/projects.xml" rel="self" type="application/rss+xml"/>
+<description></description>
+<generator>quarto-1.3.433</generator>
+<lastBuildDate>Fri, 05 Jan 2024 21:00:00 GMT</lastBuildDate>
+<item>
+  <title>Regression model using random forest</title>
+  <dc:creator>Sai manikanta praneeth perala</dc:creator>
+  <link>https://www.myblogexample.io/posts/final project/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<section id="random-forest" class="level1">
+<h1>Random Forest</h1>
+<p>The R code demonstrates the construction of a random forest classification model using a synthetic dataset with two features (X1 and X2) and a binary target variable (Y). The model is trained on 80% of the data and tested on the remaining 20%. The random forest consists of 100 trees. ## INTRODUCTION</p>
+<p>The model accuracy is then evaluated on the test set, yielding an accuracy of 0.5. An accuracy of 0.5 suggests that the model is performing no better than random chance in predicting the binary outcome. In this case, the model is not effectively capturing the underlying patterns in the data, and further exploration, feature engineering, or parameter tuning may be necessary to improve its performance. The scatter plot visually represents the data points and their classification, where the black points correspond to the instances in the test set. The lack of clear separation in the plot indicates the model’s struggle in distinguishing between the two classes based on the given features.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Load required libraries</span></span>
+<span id="cb1-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(randomForest)</span></code></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>randomForest 4.7-1.1</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Type rfNews() to see new features/changes/bug fixes.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(ggplot2)</span></code></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'ggplot2'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:randomForest':
+
+    margin</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Set a seed for reproducibility</span></span>
+<span id="cb7-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">set.seed</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">123</span>)</span>
+<span id="cb7-3"></span>
+<span id="cb7-4"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Generate a random dataset with two features (X1 and X2) and a binary target variable (Y)</span></span>
+<span id="cb7-5">n <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">100</span></span>
+<span id="cb7-6">data <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">data.frame</span>(</span>
+<span id="cb7-7">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">X1 =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rnorm</span>(n),</span>
+<span id="cb7-8">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">X2 =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rnorm</span>(n),</span>
+<span id="cb7-9">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">Y =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">factor</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sample</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, n, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">replace =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>))</span>
+<span id="cb7-10">)</span>
+<span id="cb7-11"></span>
+<span id="cb7-12"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Split the dataset into training and testing sets</span></span>
+<span id="cb7-13">train_indices <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sample</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span>n, <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.8</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> n)</span>
+<span id="cb7-14">train_data <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> data[train_indices, ]</span>
+<span id="cb7-15">test_data <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> data[<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span>train_indices, ]</span>
+<span id="cb7-16"></span>
+<span id="cb7-17"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Train a random forest model</span></span>
+<span id="cb7-18">rf_model <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">randomForest</span>(Y <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">~</span> X1 <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> X2, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">data =</span> train_data, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">ntree =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">100</span>)</span>
+<span id="cb7-19"></span>
+<span id="cb7-20"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Make predictions on the test set</span></span>
+<span id="cb7-21">predictions <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">predict</span>(rf_model, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">newdata =</span> test_data)</span>
+<span id="cb7-22"></span>
+<span id="cb7-23"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Evaluate model accuracy</span></span>
+<span id="cb7-24">accuracy <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mean</span>(predictions <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> test_data<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>Y)</span>
+<span id="cb7-25"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">cat</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Model Accuracy:"</span>, accuracy, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">\n</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Model Accuracy: 0.5 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Visualize the random forest results</span></span>
+<span id="cb9-2"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Since we have two features, we can create a scatter plot</span></span>
+<span id="cb9-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ggplot</span>(data, <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">aes</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">x =</span> X1, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">y =</span> X2, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">color =</span> Y)) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span></span>
+<span id="cb9-4">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">geom_point</span>() <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span></span>
+<span id="cb9-5">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">geom_point</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">data =</span> test_data, <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">aes</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">x =</span> X1, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">y =</span> X2), <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">color =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"black"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">size =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">alpha =</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.5</span>) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span></span>
+<span id="cb9-6">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ggtitle</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Random Forest Classification"</span>) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span></span>
+<span id="cb9-7">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">theme_minimal</span>()</span></code></pre></div>
+<div class="cell-output-display">
+<p><img src="https://www.myblogexample.io/posts/final project/index_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+
+
+</section>
+
+ ]]></description>
+  <category>code</category>
+  <category>analysis</category>
+  <category>mchine learning model</category>
+  <category>R</category>
+  <guid>https://www.myblogexample.io/posts/final project/index.html</guid>
+  <pubDate>Fri, 05 Jan 2024 21:00:00 GMT</pubDate>
+  <media:content url="https://www.myblogexample.io/posts/final project/image.jpg" medium="image" type="image/jpeg"/>
+</item>
+<item>
+  <title>Linear regression analysis</title>
+  <dc:creator>Sai manikanta praneeth perala</dc:creator>
+  <link>https://www.myblogexample.io/posts/post with code/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p><strong><em>The R code generates a complex dataset, trains a decision tree, and a linear regression model. It then visualizes the models, displays their summaries, and provides alternative visualizations without using kableExtra.</em></strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Install and load necessary packages</span></span>
+<span id="cb1-2"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> (<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">!</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">requireNamespace</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"MASS"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">quietly =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>)) {</span>
+<span id="cb1-3">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">install.packages</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"MASS"</span>)</span>
+<span id="cb1-4">}</span>
+<span id="cb1-5"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> (<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">!</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">requireNamespace</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"rpart"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">quietly =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>)) {</span>
+<span id="cb1-6">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">install.packages</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"rpart"</span>)</span>
+<span id="cb1-7">}</span>
+<span id="cb1-8"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> (<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">!</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">requireNamespace</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"rpart.plot"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">quietly =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>)) {</span>
+<span id="cb1-9">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">install.packages</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"rpart.plot"</span>)</span>
+<span id="cb1-10">}</span>
+<span id="cb1-11"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> (<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">!</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">requireNamespace</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"ggplot2"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">quietly =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>)) {</span>
+<span id="cb1-12">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">install.packages</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"ggplot2"</span>)</span>
+<span id="cb1-13">}</span>
+<span id="cb1-14"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> (<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">!</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">requireNamespace</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"kableExtra"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">quietly =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>)) {</span>
+<span id="cb1-15">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">install.packages</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"kableExtra"</span>)</span>
+<span id="cb1-16">}</span>
+<span id="cb1-17"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> (<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">!</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">requireNamespace</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"caret"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">quietly =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>)) {</span>
+<span id="cb1-18">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">install.packages</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"caret"</span>)</span>
+<span id="cb1-19">}</span>
+<span id="cb1-20"></span>
+<span id="cb1-21"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(MASS)</span>
+<span id="cb1-22"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(rpart)</span>
+<span id="cb1-23"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(rpart.plot)</span></code></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'rpart.plot' was built under R version 4.3.2</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(ggplot2)</span>
+<span id="cb3-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(kableExtra)</span>
+<span id="cb3-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(caret)</span></code></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: lattice</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Set seed for reproducibility</span></span>
+<span id="cb5-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">set.seed</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">123</span>)</span>
+<span id="cb5-3"></span>
+<span id="cb5-4"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Function to generate complex data</span></span>
+<span id="cb5-5">generate_complex_data <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">function</span>(n) {</span>
+<span id="cb5-6">  mu <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rep</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>)</span>
+<span id="cb5-7">  Sigma <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">matrix</span>(<span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.7</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">nrow =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">ncol =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>)</span>
+<span id="cb5-8">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">diag</span>(Sigma) <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span></span>
+<span id="cb5-9">  data <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mvrnorm</span>(n, mu, Sigma)</span>
+<span id="cb5-10">  data <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">as.data.frame</span>(data)</span>
+<span id="cb5-11">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">names</span>(data) <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"X1"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"X2"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"X3"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"X4"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Y"</span>)</span>
+<span id="cb5-12">  data<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>Y <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sin</span>(data<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>X1) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">log</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">exp</span>(data<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>X2)) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rnorm</span>(n)</span>
+<span id="cb5-13">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">return</span>(data)</span>
+<span id="cb5-14">}</span>
+<span id="cb5-15"></span>
+<span id="cb5-16"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Generate complex data</span></span>
+<span id="cb5-17">data <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">generate_complex_data</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">300</span>)</span>
+<span id="cb5-18"></span>
+<span id="cb5-19"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Split the dataset into training and testing sets</span></span>
+<span id="cb5-20">train_index <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">createDataPartition</span>(data<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>Y, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">p =</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.8</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">list =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span>)</span>
+<span id="cb5-21">train_data <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> data[train_index, ]</span>
+<span id="cb5-22">test_data <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> data[<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span>train_index, ]</span>
+<span id="cb5-23"></span>
+<span id="cb5-24"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Decision tree model</span></span>
+<span id="cb5-25">tree_model <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rpart</span>(Y <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">~</span> ., <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">data =</span> train_data, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">method =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"anova"</span>)</span>
+<span id="cb5-26"></span>
+<span id="cb5-27"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Linear regression model</span></span>
+<span id="cb5-28">linear_model <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">lm</span>(Y <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">~</span> ., <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">data =</span> train_data)</span>
+<span id="cb5-29"></span>
+<span id="cb5-30"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Visualize decision tree</span></span>
+<span id="cb5-31"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rpart.plot</span>(tree_model, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">main =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Decision Tree Model"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">extra =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">101</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">under =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">compress =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>)</span></code></pre></div>
+<div class="cell-output-display">
+<p><img src="https://www.myblogexample.io/posts/post with code/index_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Visualize linear regression</span></span>
+<span id="cb6-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ggplot</span>(train_data, <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">aes</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">x =</span> Y, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">y =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">predict</span>(linear_model))) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span></span>
+<span id="cb6-3">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">geom_point</span>() <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span></span>
+<span id="cb6-4">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">geom_abline</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">intercept =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">slope =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">linetype =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"dashed"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">color =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"red"</span>) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span></span>
+<span id="cb6-5">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ggtitle</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Linear Regression Model"</span>)</span></code></pre></div>
+<div class="cell-output-display">
+<p><img src="https://www.myblogexample.io/posts/post with code/index_files/figure-html/unnamed-chunk-1-2.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Display decision tree model summary using kableExtra</span></span>
+<span id="cb7-2">tree_summary <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">summary</span>(tree_model)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Call:
+rpart(formula = Y ~ ., data = train_data, method = "anova")
+  n= 240 
+
+          CP nsplit rel error    xerror       xstd
+1 0.54997276      0 1.0000000 1.0057093 0.07513055
+2 0.17981516      1 0.4500272 0.5183794 0.04043374
+3 0.03312631      2 0.2702121 0.3261017 0.02839097
+4 0.03075679      3 0.2370858 0.3057193 0.02639404
+5 0.02067114      4 0.2063290 0.2473445 0.02244488
+6 0.01987992      5 0.1856578 0.2499782 0.02174300
+7 0.01193845      6 0.1657779 0.2357704 0.02084311
+8 0.01000000      7 0.1538395 0.2310490 0.02059688
+
+Variable importance
+X1 X2 X3 X4 
+39 28 17 16 
+
+Node number 1: 240 observations,    complexity param=0.5499728
+  mean=2.460614, MSE=7.621179 
+  left son=2 (96 obs) right son=3 (144 obs)
+  Primary splits:
+      X1 &lt; -0.1520619  to the left,  improve=0.5499728, (0 missing)
+      X2 &lt; 0.5711715   to the left,  improve=0.5159892, (0 missing)
+      X3 &lt; 0.1208541   to the left,  improve=0.2968321, (0 missing)
+      X4 &lt; -0.07148916 to the left,  improve=0.2886611, (0 missing)
+  Surrogate splits:
+      X2 &lt; -0.3762551  to the left,  agree=0.779, adj=0.448, (0 split)
+      X3 &lt; -0.2387109  to the left,  agree=0.758, adj=0.396, (0 split)
+      X4 &lt; -0.3551359  to the left,  agree=0.754, adj=0.385, (0 split)
+
+Node number 2: 96 observations,    complexity param=0.03075679
+  mean=-0.04680701, MSE=1.833011 
+  left son=4 (67 obs) right son=5 (29 obs)
+  Primary splits:
+      X2 &lt; -0.2476466  to the left,  improve=0.3196967, (0 missing)
+      X1 &lt; -0.8322406  to the left,  improve=0.2236104, (0 missing)
+      X4 &lt; -0.4008152  to the left,  improve=0.1813125, (0 missing)
+      X3 &lt; -0.904785   to the left,  improve=0.1080443, (0 missing)
+  Surrogate splits:
+      X3 &lt; 0.2833611   to the left,  agree=0.781, adj=0.276, (0 split)
+      X1 &lt; -0.3992759  to the left,  agree=0.760, adj=0.207, (0 split)
+      X4 &lt; -0.09476738 to the left,  agree=0.750, adj=0.172, (0 split)
+
+Node number 3: 144 observations,    complexity param=0.1798152
+  mean=4.132228, MSE=4.494223 
+  left son=6 (86 obs) right son=7 (58 obs)
+  Primary splits:
+      X2 &lt; 0.7020045   to the left,  improve=0.5082093, (0 missing)
+      X1 &lt; 0.5961358   to the left,  improve=0.4199056, (0 missing)
+      X3 &lt; 1.187476    to the left,  improve=0.2117912, (0 missing)
+      X4 &lt; 0.7281971   to the left,  improve=0.1454059, (0 missing)
+  Surrogate splits:
+      X1 &lt; 0.5961358   to the left,  agree=0.722, adj=0.310, (0 split)
+      X3 &lt; 1.00385     to the left,  agree=0.722, adj=0.310, (0 split)
+      X4 &lt; 0.7281971   to the left,  agree=0.708, adj=0.276, (0 split)
+
+Node number 4: 67 observations
+  mean=-0.5504389, MSE=1.339999 
+
+Node number 5: 29 observations
+  mean=1.116756, MSE=1.032152 
+
+Node number 6: 86 observations,    complexity param=0.02067114
+  mean=2.89111, MSE=1.984277 
+  left son=12 (66 obs) right son=13 (20 obs)
+  Primary splits:
+      X1 &lt; 0.6788651   to the left,  improve=0.22156300, (0 missing)
+      X2 &lt; -0.6461858  to the left,  improve=0.18349230, (0 missing)
+      X3 &lt; 0.3337678   to the left,  improve=0.07177039, (0 missing)
+      X4 &lt; -0.6901304  to the left,  improve=0.07147937, (0 missing)
+  Surrogate splits:
+      X3 &lt; 1.306227    to the left,  agree=0.791, adj=0.1, (0 split)
+
+Node number 7: 58 observations,    complexity param=0.03312631
+  mean=5.972508, MSE=2.545232 
+  left son=14 (19 obs) right son=15 (39 obs)
+  Primary splits:
+      X1 &lt; 0.5487777   to the left,  improve=0.4104414, (0 missing)
+      X2 &lt; 1.284502    to the left,  improve=0.3764514, (0 missing)
+      X3 &lt; 0.64023     to the left,  improve=0.1446203, (0 missing)
+      X4 &lt; 0.5195383   to the left,  improve=0.1065470, (0 missing)
+  Surrogate splits:
+      X4 &lt; 0.1602244   to the left,  agree=0.759, adj=0.263, (0 split)
+      X3 &lt; -0.4101765  to the left,  agree=0.707, adj=0.105, (0 split)
+
+Node number 12: 66 observations,    complexity param=0.01987992
+  mean=2.52611, MSE=1.634518 
+  left son=24 (37 obs) right son=25 (29 obs)
+  Primary splits:
+      X2 &lt; 0.1420471   to the left,  improve=0.33706550, (0 missing)
+      X3 &lt; 0.7950633   to the left,  improve=0.07418237, (0 missing)
+      X4 &lt; -0.7620964  to the left,  improve=0.07367549, (0 missing)
+      X1 &lt; 0.202155    to the left,  improve=0.06774626, (0 missing)
+  Surrogate splits:
+      X3 &lt; -0.07669569 to the left,  agree=0.652, adj=0.207, (0 split)
+      X1 &lt; -0.03456467 to the right, agree=0.591, adj=0.069, (0 split)
+      X4 &lt; 0.7481645   to the left,  agree=0.576, adj=0.034, (0 split)
+
+Node number 13: 20 observations
+  mean=4.095609, MSE=1.248018 
+
+Node number 14: 19 observations
+  mean=4.508159, MSE=1.691793 
+
+Node number 15: 39 observations,    complexity param=0.01193845
+  mean=6.685909, MSE=1.4074 
+  left son=30 (11 obs) right son=31 (28 obs)
+  Primary splits:
+      X2 &lt; 0.9883665   to the left,  improve=0.39783150, (0 missing)
+      X1 &lt; 1.190038    to the left,  improve=0.18917110, (0 missing)
+      X3 &lt; 0.4410145   to the left,  improve=0.14366120, (0 missing)
+      X4 &lt; 0.7637458   to the right, improve=0.02763798, (0 missing)
+  Surrogate splits:
+      X3 &lt; 0.1215273   to the left,  agree=0.795, adj=0.273, (0 split)
+      X4 &lt; 1.665356    to the right, agree=0.744, adj=0.091, (0 split)
+
+Node number 24: 37 observations
+  mean=1.868981, MSE=1.091084 
+
+Node number 25: 29 observations
+  mean=3.364515, MSE=1.074002 
+
+Node number 30: 11 observations
+  mean=5.492083, MSE=0.8445061 
+
+Node number 31: 28 observations
+  mean=7.154912, MSE=0.8486653 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Display linear regression model summary using kableExtra</span></span>
+<span id="cb9-2">linear_summary <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">summary</span>(linear_model)</span>
+<span id="cb9-3"></span>
+<span id="cb9-4"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Display decision tree model summary</span></span>
+<span id="cb9-5">tree_summary <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">summary</span>(tree_model)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Call:
+rpart(formula = Y ~ ., data = train_data, method = "anova")
+  n= 240 
+
+          CP nsplit rel error    xerror       xstd
+1 0.54997276      0 1.0000000 1.0057093 0.07513055
+2 0.17981516      1 0.4500272 0.5183794 0.04043374
+3 0.03312631      2 0.2702121 0.3261017 0.02839097
+4 0.03075679      3 0.2370858 0.3057193 0.02639404
+5 0.02067114      4 0.2063290 0.2473445 0.02244488
+6 0.01987992      5 0.1856578 0.2499782 0.02174300
+7 0.01193845      6 0.1657779 0.2357704 0.02084311
+8 0.01000000      7 0.1538395 0.2310490 0.02059688
+
+Variable importance
+X1 X2 X3 X4 
+39 28 17 16 
+
+Node number 1: 240 observations,    complexity param=0.5499728
+  mean=2.460614, MSE=7.621179 
+  left son=2 (96 obs) right son=3 (144 obs)
+  Primary splits:
+      X1 &lt; -0.1520619  to the left,  improve=0.5499728, (0 missing)
+      X2 &lt; 0.5711715   to the left,  improve=0.5159892, (0 missing)
+      X3 &lt; 0.1208541   to the left,  improve=0.2968321, (0 missing)
+      X4 &lt; -0.07148916 to the left,  improve=0.2886611, (0 missing)
+  Surrogate splits:
+      X2 &lt; -0.3762551  to the left,  agree=0.779, adj=0.448, (0 split)
+      X3 &lt; -0.2387109  to the left,  agree=0.758, adj=0.396, (0 split)
+      X4 &lt; -0.3551359  to the left,  agree=0.754, adj=0.385, (0 split)
+
+Node number 2: 96 observations,    complexity param=0.03075679
+  mean=-0.04680701, MSE=1.833011 
+  left son=4 (67 obs) right son=5 (29 obs)
+  Primary splits:
+      X2 &lt; -0.2476466  to the left,  improve=0.3196967, (0 missing)
+      X1 &lt; -0.8322406  to the left,  improve=0.2236104, (0 missing)
+      X4 &lt; -0.4008152  to the left,  improve=0.1813125, (0 missing)
+      X3 &lt; -0.904785   to the left,  improve=0.1080443, (0 missing)
+  Surrogate splits:
+      X3 &lt; 0.2833611   to the left,  agree=0.781, adj=0.276, (0 split)
+      X1 &lt; -0.3992759  to the left,  agree=0.760, adj=0.207, (0 split)
+      X4 &lt; -0.09476738 to the left,  agree=0.750, adj=0.172, (0 split)
+
+Node number 3: 144 observations,    complexity param=0.1798152
+  mean=4.132228, MSE=4.494223 
+  left son=6 (86 obs) right son=7 (58 obs)
+  Primary splits:
+      X2 &lt; 0.7020045   to the left,  improve=0.5082093, (0 missing)
+      X1 &lt; 0.5961358   to the left,  improve=0.4199056, (0 missing)
+      X3 &lt; 1.187476    to the left,  improve=0.2117912, (0 missing)
+      X4 &lt; 0.7281971   to the left,  improve=0.1454059, (0 missing)
+  Surrogate splits:
+      X1 &lt; 0.5961358   to the left,  agree=0.722, adj=0.310, (0 split)
+      X3 &lt; 1.00385     to the left,  agree=0.722, adj=0.310, (0 split)
+      X4 &lt; 0.7281971   to the left,  agree=0.708, adj=0.276, (0 split)
+
+Node number 4: 67 observations
+  mean=-0.5504389, MSE=1.339999 
+
+Node number 5: 29 observations
+  mean=1.116756, MSE=1.032152 
+
+Node number 6: 86 observations,    complexity param=0.02067114
+  mean=2.89111, MSE=1.984277 
+  left son=12 (66 obs) right son=13 (20 obs)
+  Primary splits:
+      X1 &lt; 0.6788651   to the left,  improve=0.22156300, (0 missing)
+      X2 &lt; -0.6461858  to the left,  improve=0.18349230, (0 missing)
+      X3 &lt; 0.3337678   to the left,  improve=0.07177039, (0 missing)
+      X4 &lt; -0.6901304  to the left,  improve=0.07147937, (0 missing)
+  Surrogate splits:
+      X3 &lt; 1.306227    to the left,  agree=0.791, adj=0.1, (0 split)
+
+Node number 7: 58 observations,    complexity param=0.03312631
+  mean=5.972508, MSE=2.545232 
+  left son=14 (19 obs) right son=15 (39 obs)
+  Primary splits:
+      X1 &lt; 0.5487777   to the left,  improve=0.4104414, (0 missing)
+      X2 &lt; 1.284502    to the left,  improve=0.3764514, (0 missing)
+      X3 &lt; 0.64023     to the left,  improve=0.1446203, (0 missing)
+      X4 &lt; 0.5195383   to the left,  improve=0.1065470, (0 missing)
+  Surrogate splits:
+      X4 &lt; 0.1602244   to the left,  agree=0.759, adj=0.263, (0 split)
+      X3 &lt; -0.4101765  to the left,  agree=0.707, adj=0.105, (0 split)
+
+Node number 12: 66 observations,    complexity param=0.01987992
+  mean=2.52611, MSE=1.634518 
+  left son=24 (37 obs) right son=25 (29 obs)
+  Primary splits:
+      X2 &lt; 0.1420471   to the left,  improve=0.33706550, (0 missing)
+      X3 &lt; 0.7950633   to the left,  improve=0.07418237, (0 missing)
+      X4 &lt; -0.7620964  to the left,  improve=0.07367549, (0 missing)
+      X1 &lt; 0.202155    to the left,  improve=0.06774626, (0 missing)
+  Surrogate splits:
+      X3 &lt; -0.07669569 to the left,  agree=0.652, adj=0.207, (0 split)
+      X1 &lt; -0.03456467 to the right, agree=0.591, adj=0.069, (0 split)
+      X4 &lt; 0.7481645   to the left,  agree=0.576, adj=0.034, (0 split)
+
+Node number 13: 20 observations
+  mean=4.095609, MSE=1.248018 
+
+Node number 14: 19 observations
+  mean=4.508159, MSE=1.691793 
+
+Node number 15: 39 observations,    complexity param=0.01193845
+  mean=6.685909, MSE=1.4074 
+  left son=30 (11 obs) right son=31 (28 obs)
+  Primary splits:
+      X2 &lt; 0.9883665   to the left,  improve=0.39783150, (0 missing)
+      X1 &lt; 1.190038    to the left,  improve=0.18917110, (0 missing)
+      X3 &lt; 0.4410145   to the left,  improve=0.14366120, (0 missing)
+      X4 &lt; 0.7637458   to the right, improve=0.02763798, (0 missing)
+  Surrogate splits:
+      X3 &lt; 0.1215273   to the left,  agree=0.795, adj=0.273, (0 split)
+      X4 &lt; 1.665356    to the right, agree=0.744, adj=0.091, (0 split)
+
+Node number 24: 37 observations
+  mean=1.868981, MSE=1.091084 
+
+Node number 25: 29 observations
+  mean=3.364515, MSE=1.074002 
+
+Node number 30: 11 observations
+  mean=5.492083, MSE=0.8445061 
+
+Node number 31: 28 observations
+  mean=7.154912, MSE=0.8486653 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Decision Tree Model Summary:"</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Decision Tree Model Summary:"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">print</span>(tree_summary<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>splits)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   count ncat    improve       index        adj
+X1   240   -1 0.54997276 -0.15206190 0.00000000
+X2   240   -1 0.51598924  0.57117154 0.00000000
+X3   240   -1 0.29683212  0.12085413 0.00000000
+X4   240   -1 0.28866113 -0.07148916 0.00000000
+X2     0   -1 0.77916667 -0.37625507 0.44791667
+X3     0   -1 0.75833333 -0.23871092 0.39583333
+X4     0   -1 0.75416667 -0.35513593 0.38541667
+X2    96   -1 0.31969666 -0.24764657 0.00000000
+X1    96   -1 0.22361036 -0.83224062 0.00000000
+X4    96   -1 0.18131247 -0.40081515 0.00000000
+X3    96   -1 0.10804433 -0.90478499 0.00000000
+X3     0   -1 0.78125000  0.28336110 0.27586207
+X1     0   -1 0.76041667 -0.39927594 0.20689655
+X4     0   -1 0.75000000 -0.09476738 0.17241379
+X2   144   -1 0.50820930  0.70200451 0.00000000
+X1   144   -1 0.41990565  0.59613581 0.00000000
+X3   144   -1 0.21179123  1.18747565 0.00000000
+X4   144   -1 0.14540589  0.72819711 0.00000000
+X1     0   -1 0.72222222  0.59613581 0.31034483
+X3     0   -1 0.72222222  1.00385016 0.31034483
+X4     0   -1 0.70833333  0.72819711 0.27586207
+X1    86   -1 0.22156296  0.67886512 0.00000000
+X2    86   -1 0.18349234 -0.64618584 0.00000000
+X3    86   -1 0.07177039  0.33376782 0.00000000
+X4    86   -1 0.07147937 -0.69013038 0.00000000
+X3     0   -1 0.79069767  1.30622740 0.10000000
+X2    66   -1 0.33706547  0.14204707 0.00000000
+X3    66   -1 0.07418237  0.79506334 0.00000000
+X4    66   -1 0.07367549 -0.76209643 0.00000000
+X1    66   -1 0.06774626  0.20215498 0.00000000
+X3     0   -1 0.65151515 -0.07669569 0.20689655
+X1     0    1 0.59090909 -0.03456467 0.06896552
+X4     0   -1 0.57575758  0.74816451 0.03448276
+X1    58   -1 0.41044136  0.54877770 0.00000000
+X2    58   -1 0.37645141  1.28450238 0.00000000
+X3    58   -1 0.14462033  0.64023004 0.00000000
+X4    58   -1 0.10654699  0.51953834 0.00000000
+X4     0   -1 0.75862069  0.16022443 0.26315789
+X3     0   -1 0.70689655 -0.41017654 0.10526316
+X2    39   -1 0.39783153  0.98836651 0.00000000
+X1    39   -1 0.18917108  1.19003822 0.00000000
+X3    39   -1 0.14366117  0.44101446 0.00000000
+X4    39    1 0.02763798  0.76374584 0.00000000
+X3     0   -1 0.79487179  0.12152733 0.27272727
+X4     0    1 0.74358974  1.66535587 0.09090909</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Display linear regression model summary</span></span>
+<span id="cb15-2">linear_summary <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">summary</span>(linear_model)</span>
+<span id="cb15-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">\n</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">Linear Regression Model Summary:"</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "\nLinear Regression Model Summary:"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">print</span>(linear_summary)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = Y ~ ., data = train_data)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-3.5444 -0.8216 -0.0462  0.7647  4.9136 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  2.51934    0.08004  31.476   &lt;2e-16 ***
+X1           1.46213    0.13025  11.225   &lt;2e-16 ***
+X2           1.40304    0.12716  11.034   &lt;2e-16 ***
+X3           0.04054    0.12353   0.328    0.743    
+X4          -0.07251    0.12161  -0.596    0.552    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 1.239 on 235 degrees of freedom
+Multiple R-squared:  0.8028,    Adjusted R-squared:  0.7995 
+F-statistic: 239.2 on 4 and 235 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb19" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Visualization of decision tree</span></span>
+<span id="cb19-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">plot</span>(tree_model, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">uniform =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">main =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Decision Tree Model"</span>)</span></code></pre></div>
+<div class="cell-output-display">
+<p><img src="https://www.myblogexample.io/posts/post with code/index_files/figure-html/unnamed-chunk-1-3.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb20" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Visualization of linear regression</span></span>
+<span id="cb20-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">par</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">mfrow =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>))  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Reset the plotting layout</span></span>
+<span id="cb20-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">plot</span>(train_data<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>Y, <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">predict</span>(linear_model), <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">main =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Linear Regression Model"</span>,</span>
+<span id="cb20-4">     <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">xlab =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Actual Y"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">ylab =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Predicted Y"</span>)</span>
+<span id="cb20-5"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">abline</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">a =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">b =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">col =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"red"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">lty =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>)</span></code></pre></div>
+<div class="cell-output-display">
+<p><img src="https://www.myblogexample.io/posts/post with code/index_files/figure-html/unnamed-chunk-1-4.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p><strong>The linear regression model results indicate a strong fit to the data with a high adjusted R-squared value of 0.7995, suggesting that approximately 79.95% of the variability in the response variable (Y) is explained by the predictor variables (X1, X2, X3, X4). Notably, X1 and X2 demonstrate significant positive coefficients (1.46213 and 1.40304, respectively), indicating their substantial impact on the response. However, the coefficients for X3 and X4 are not statistically significant based on their p-values (0.743 and 0.552, respectively), suggesting a potential lack of influence. The overall model is highly significant (p-value &lt; 2.2e-16), emphasizing its effectiveness in capturing the relationships within the data.</strong></p>
+
+
+
+ ]]></description>
+  <category>news</category>
+  <category>code</category>
+  <category>analysis</category>
+  <guid>https://www.myblogexample.io/posts/post with code/index.html</guid>
+  <pubDate>Tue, 05 Dec 2023 21:00:00 GMT</pubDate>
+  <media:content url="https://www.myblogexample.io/posts/post with code/image.jpg" medium="image" type="image/jpeg"/>
+</item>
+<item>
+  <title>Machine learning model visualization</title>
+  <dc:creator>Sai manikanta praneeth perala</dc:creator>
+  <link>https://www.myblogexample.io/posts/post with plot/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p><strong><em>This R code utilizes ggplot2, corrplot, caret, and Metrics to analyze a synthetic dataset. It starts with summary statistics, visualizes relationships with scatter plots, and depicts correlations using a color-coded matrix. The main focus is on a linear regression model predicting ‘mpg’ based on ‘wt.’ The model’s summary and evaluation metrics, including RMSE, are provided. The ggplot2 package is then used to visualize the regression line on a scatter plot of ‘wt’ versus ‘mpg,’ offering a concise exploration of the dataset and the linear regression model.</em></strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Load necessary libraries</span></span>
+<span id="cb1-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(ggplot2)</span>
+<span id="cb1-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(corrplot)</span></code></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>corrplot 0.92 loaded</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(caret)</span></code></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: lattice</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(Metrics)</span></code></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'Metrics' was built under R version 4.3.2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'Metrics'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:caret':
+
+    precision, recall</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Create a dataframe with random values</span></span>
+<span id="cb9-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">set.seed</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">123</span>)</span>
+<span id="cb9-3">n <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">100</span></span>
+<span id="cb9-4">random_df <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">data.frame</span>(</span>
+<span id="cb9-5">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">mpg =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rnorm</span>(n, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">mean =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">25</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">sd =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>),</span>
+<span id="cb9-6">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">wt =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rnorm</span>(n, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">mean =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">sd =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>),</span>
+<span id="cb9-7">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">disp =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rnorm</span>(n, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">mean =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">200</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">sd =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">50</span>),</span>
+<span id="cb9-8">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">hp =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rnorm</span>(n, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">mean =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">120</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">sd =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">30</span>)</span>
+<span id="cb9-9">)</span>
+<span id="cb9-10"></span>
+<span id="cb9-11"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># EDA: Summary statistics and structure of the dataset</span></span>
+<span id="cb9-12"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">summary</span>(random_df)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      mpg              wt              disp             hp        
+ Min.   :13.45   Min.   :0.9468   Min.   :112.2   Min.   : 46.02  
+ 1st Qu.:22.53   1st Qu.:2.1989   1st Qu.:173.4   1st Qu.: 98.12  
+ Median :25.31   Median :2.7742   Median :201.8   Median :119.89  
+ Mean   :25.45   Mean   :2.8925   Mean   :206.0   Mean   :118.91  
+ 3rd Qu.:28.46   3rd Qu.:3.4678   3rd Qu.:238.2   3rd Qu.:140.66  
+ Max.   :35.94   Max.   :6.2410   Max.   :314.7   Max.   :197.14  </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">str</span>(random_df)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>'data.frame':   100 obs. of  4 variables:
+ $ mpg : num  22.2 23.8 32.8 25.4 25.6 ...
+ $ wt  : num  2.29 3.26 2.75 2.65 2.05 ...
+ $ disp: num  310 266 187 227 179 ...
+ $ hp  : num  98.5 97.4 91.8 88.4 106.9 ...</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Scatter plots for selected relationships</span></span>
+<span id="cb13-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">pairs</span>(random_df, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">col =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"#FFA500"</span>)</span></code></pre></div>
+<div class="cell-output-display">
+<p><img src="https://www.myblogexample.io/posts/post with plot/index_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Correlation matrix visualization</span></span>
+<span id="cb14-2">correlation_matrix <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">cor</span>(random_df)</span>
+<span id="cb14-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">corrplot</span>(correlation_matrix, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">method =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"color"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">col =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">colorRampPalette</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"#B2DF8A"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"#1F78B4"</span>))(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">20</span>))</span></code></pre></div>
+<div class="cell-output-display">
+<p><img src="https://www.myblogexample.io/posts/post with plot/index_files/figure-html/unnamed-chunk-1-2.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Linear Regression Model</span></span>
+<span id="cb15-2"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Assume mpg as the dependent variable and wt as the independent variable</span></span>
+<span id="cb15-3">model <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">lm</span>(mpg <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">~</span> wt, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">data =</span> random_df)</span>
+<span id="cb15-4"></span>
+<span id="cb15-5"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Model summary</span></span>
+<span id="cb15-6"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">summary</span>(model)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = mpg ~ wt, data = random_df)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-11.9575  -2.9785  -0.2153   2.9612  10.6502 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  26.1282     1.4516  18.000   &lt;2e-16 ***
+wt           -0.2338     0.4762  -0.491    0.625    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 4.582 on 98 degrees of freedom
+Multiple R-squared:  0.002453,  Adjusted R-squared:  -0.007726 
+F-statistic: 0.241 on 1 and 98 DF,  p-value: 0.6246</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Predictions</span></span>
+<span id="cb17-2">predictions <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">predict</span>(model, random_df)</span>
+<span id="cb17-3"></span>
+<span id="cb17-4"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Model evaluation</span></span>
+<span id="cb17-5">rmse_value <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rmse</span>(predictions, random_df<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>mpg)</span>
+<span id="cb17-6"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">cat</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Root Mean Squared Error (RMSE):"</span>, rmse_value, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">\n</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Root Mean Squared Error (RMSE): 4.535627 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb19" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Visualization of the linear regression line</span></span>
+<span id="cb19-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ggplot</span>(random_df, <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">aes</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">x =</span> wt, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">y =</span> mpg)) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span></span>
+<span id="cb19-3">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">geom_point</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">color =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"#FFA500"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">size =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span></span>
+<span id="cb19-4">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">geom_smooth</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">method =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"lm"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">se =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">color =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"#E41A1C"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">linetype =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"dashed"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">size =</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1.5</span>) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span></span>
+<span id="cb19-5">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">labs</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">title =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Linear Regression: MPG vs Weight"</span>,</span>
+<span id="cb19-6">       <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">x =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Weight"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">y =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Miles per Gallon"</span>) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span></span>
+<span id="cb19-7">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">theme_minimal</span>() <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span></span>
+<span id="cb19-8">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">theme</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">plot.title =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">element_text</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">color =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"#4DAF4A"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">size =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">16</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">face =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"bold"</span>),</span>
+<span id="cb19-9">        <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">axis.title.x =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">element_text</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">color =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"#377EB8"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">size =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">14</span>),</span>
+<span id="cb19-10">        <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">axis.title.y =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">element_text</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">color =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"#FF7F00"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">size =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">14</span>),</span>
+<span id="cb19-11">        <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">axis.text =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">element_text</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">color =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"#333333"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">size =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">12</span>),</span>
+<span id="cb19-12">        <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">legend.position =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"none"</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+ℹ Please use `linewidth` instead.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="https://www.myblogexample.io/posts/post with plot/index_files/figure-html/unnamed-chunk-1-3.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+
+
+
+ ]]></description>
+  <category>news</category>
+  <category>code</category>
+  <category>analysis</category>
+  <category>plotly</category>
+  <category>plot</category>
+  <guid>https://www.myblogexample.io/posts/post with plot/index.html</guid>
+  <pubDate>Tue, 05 Dec 2023 21:00:00 GMT</pubDate>
+  <media:content url="https://www.myblogexample.io/posts/post with plot/image.jpg" medium="image" type="image/jpeg"/>
+</item>
+<item>
+  <title>Welcome To My Blog</title>
+  <dc:creator>Sai manikanta praneeth perala</dc:creator>
+  <link>https://www.myblogexample.io/posts/welcome/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>This is the first post in my blog projects. Welcome!</p>
+<p><img src="https://www.myblogexample.io/images/sa.jpg" class="img-fluid"></p>
+
+
+
+ ]]></description>
+  <category>news</category>
+  <guid>https://www.myblogexample.io/posts/welcome/index.html</guid>
+  <pubDate>Sat, 02 Dec 2023 21:00:00 GMT</pubDate>
+</item>
+</channel>
+</rss>

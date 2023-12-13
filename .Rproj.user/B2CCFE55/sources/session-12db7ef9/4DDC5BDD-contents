@@ -1,0 +1,23 @@
+---
+title: "Sai manikanta praneeth perala"
+image: images/sa.jpg
+about:
+  template: jolla
+  links:
+    - icon: twitter
+      text: Twitter
+      href: https://twitter.com
+    - icon: linkedin
+      text: LinkedIn
+      href: www.linkedin.com
+    - icon: github
+      text: Github
+      href: https://github.com
+    - icon: envelope
+      text: Contact me
+      href: mailto:Sai.Saimanikantapraneeperala@my.unt.edu 
+---
+
+## BIO
+
+Am a skilled Systems Engineer at Infosys, specializing in the Testing Domain since September 2021. I holds a degree in Mechanical Engineering from Vasavi College of Engineering and has a strong academic background, including certifications in Renewable Energy and Thermodynamics. Apart from my professional endeavors,I have  showcased my engineering prowess through a project on the "Design and Development of 3 Degrees of Freedom Delta Robot" during his undergraduate years.

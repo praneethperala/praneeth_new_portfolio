@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.433">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Sai manikanta praneeth perala">
+<meta name="dcterms.date" content="2023-12-06">
+
+<title>Sai manikanta praneeth perala - Linear regression analysis</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../images/sa.jpg" rel="icon" type="image/jpeg">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Sai manikanta praneeth perala</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html" rel="" target="">
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../projects.html" rel="" target="">
+ <span class="menu-text">blog</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../resume.html" rel="" target="">
+ <span class="menu-text">Resume</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com" rel="" target=""><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Linear regression analysis</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">news</div>
+                <div class="quarto-category">code</div>
+                <div class="quarto-category">analysis</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Sai manikanta praneeth perala </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">December 6, 2023</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p><strong><em>The R code generates a complex dataset, trains a decision tree, and a linear regression model. It then visualizes the models, displays their summaries, and provides alternative visualizations without using kableExtra.</em></strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install and load necessary packages</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">requireNamespace</span>(<span class="st">"MASS"</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>)) {</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">install.packages</span>(<span class="st">"MASS"</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">requireNamespace</span>(<span class="st">"rpart"</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>)) {</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">install.packages</span>(<span class="st">"rpart"</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">requireNamespace</span>(<span class="st">"rpart.plot"</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>)) {</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">install.packages</span>(<span class="st">"rpart.plot"</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">requireNamespace</span>(<span class="st">"ggplot2"</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>)) {</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">install.packages</span>(<span class="st">"ggplot2"</span>)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">requireNamespace</span>(<span class="st">"kableExtra"</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>)) {</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">install.packages</span>(<span class="st">"kableExtra"</span>)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">requireNamespace</span>(<span class="st">"caret"</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>)) {</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">install.packages</span>(<span class="st">"caret"</span>)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS)</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rpart)</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rpart.plot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'rpart.plot' was built under R version 4.3.2</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(kableExtra)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: lattice</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set seed for reproducibility</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to generate complex data</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>generate_complex_data <span class="ot">&lt;-</span> <span class="cf">function</span>(n) {</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  mu <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">5</span>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  Sigma <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fl">0.7</span>, <span class="at">nrow =</span> <span class="dv">5</span>, <span class="at">ncol =</span> <span class="dv">5</span>)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">diag</span>(Sigma) <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  data <span class="ot">&lt;-</span> <span class="fu">mvrnorm</span>(n, mu, Sigma)</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  data <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(data)</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>(data) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"X1"</span>, <span class="st">"X2"</span>, <span class="st">"X3"</span>, <span class="st">"X4"</span>, <span class="st">"Y"</span>)</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  data<span class="sc">$</span>Y <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">*</span><span class="fu">sin</span>(data<span class="sc">$</span>X1) <span class="sc">+</span> <span class="dv">3</span><span class="sc">*</span><span class="fu">log</span>(<span class="dv">1</span> <span class="sc">+</span> <span class="fu">exp</span>(data<span class="sc">$</span>X2)) <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(data)</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate complex data</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">generate_complex_data</span>(<span class="dv">300</span>)</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Split the dataset into training and testing sets</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>train_index <span class="ot">&lt;-</span> <span class="fu">createDataPartition</span>(data<span class="sc">$</span>Y, <span class="at">p =</span> <span class="fl">0.8</span>, <span class="at">list =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>train_data <span class="ot">&lt;-</span> data[train_index, ]</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>test_data <span class="ot">&lt;-</span> data[<span class="sc">-</span>train_index, ]</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Decision tree model</span></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>tree_model <span class="ot">&lt;-</span> <span class="fu">rpart</span>(Y <span class="sc">~</span> ., <span class="at">data =</span> train_data, <span class="at">method =</span> <span class="st">"anova"</span>)</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Linear regression model</span></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>linear_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(Y <span class="sc">~</span> ., <span class="at">data =</span> train_data)</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualize decision tree</span></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a><span class="fu">rpart.plot</span>(tree_model, <span class="at">main =</span> <span class="st">"Decision Tree Model"</span>, <span class="at">extra =</span> <span class="dv">101</span>, <span class="at">under =</span> <span class="cn">TRUE</span>, <span class="at">compress =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualize linear regression</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(train_data, <span class="fu">aes</span>(<span class="at">x =</span> Y, <span class="at">y =</span> <span class="fu">predict</span>(linear_model))) <span class="sc">+</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">intercept =</span> <span class="dv">0</span>, <span class="at">slope =</span> <span class="dv">1</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">color =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Linear Regression Model"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-1-2.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Display decision tree model summary using kableExtra</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>tree_summary <span class="ot">&lt;-</span> <span class="fu">summary</span>(tree_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Call:
+rpart(formula = Y ~ ., data = train_data, method = "anova")
+  n= 240 
+
+          CP nsplit rel error    xerror       xstd
+1 0.54997276      0 1.0000000 1.0057093 0.07513055
+2 0.17981516      1 0.4500272 0.5183794 0.04043374
+3 0.03312631      2 0.2702121 0.3261017 0.02839097
+4 0.03075679      3 0.2370858 0.3057193 0.02639404
+5 0.02067114      4 0.2063290 0.2473445 0.02244488
+6 0.01987992      5 0.1856578 0.2499782 0.02174300
+7 0.01193845      6 0.1657779 0.2357704 0.02084311
+8 0.01000000      7 0.1538395 0.2310490 0.02059688
+
+Variable importance
+X1 X2 X3 X4 
+39 28 17 16 
+
+Node number 1: 240 observations,    complexity param=0.5499728
+  mean=2.460614, MSE=7.621179 
+  left son=2 (96 obs) right son=3 (144 obs)
+  Primary splits:
+      X1 &lt; -0.1520619  to the left,  improve=0.5499728, (0 missing)
+      X2 &lt; 0.5711715   to the left,  improve=0.5159892, (0 missing)
+      X3 &lt; 0.1208541   to the left,  improve=0.2968321, (0 missing)
+      X4 &lt; -0.07148916 to the left,  improve=0.2886611, (0 missing)
+  Surrogate splits:
+      X2 &lt; -0.3762551  to the left,  agree=0.779, adj=0.448, (0 split)
+      X3 &lt; -0.2387109  to the left,  agree=0.758, adj=0.396, (0 split)
+      X4 &lt; -0.3551359  to the left,  agree=0.754, adj=0.385, (0 split)
+
+Node number 2: 96 observations,    complexity param=0.03075679
+  mean=-0.04680701, MSE=1.833011 
+  left son=4 (67 obs) right son=5 (29 obs)
+  Primary splits:
+      X2 &lt; -0.2476466  to the left,  improve=0.3196967, (0 missing)
+      X1 &lt; -0.8322406  to the left,  improve=0.2236104, (0 missing)
+      X4 &lt; -0.4008152  to the left,  improve=0.1813125, (0 missing)
+      X3 &lt; -0.904785   to the left,  improve=0.1080443, (0 missing)
+  Surrogate splits:
+      X3 &lt; 0.2833611   to the left,  agree=0.781, adj=0.276, (0 split)
+      X1 &lt; -0.3992759  to the left,  agree=0.760, adj=0.207, (0 split)
+      X4 &lt; -0.09476738 to the left,  agree=0.750, adj=0.172, (0 split)
+
+Node number 3: 144 observations,    complexity param=0.1798152
+  mean=4.132228, MSE=4.494223 
+  left son=6 (86 obs) right son=7 (58 obs)
+  Primary splits:
+      X2 &lt; 0.7020045   to the left,  improve=0.5082093, (0 missing)
+      X1 &lt; 0.5961358   to the left,  improve=0.4199056, (0 missing)
+      X3 &lt; 1.187476    to the left,  improve=0.2117912, (0 missing)
+      X4 &lt; 0.7281971   to the left,  improve=0.1454059, (0 missing)
+  Surrogate splits:
+      X1 &lt; 0.5961358   to the left,  agree=0.722, adj=0.310, (0 split)
+      X3 &lt; 1.00385     to the left,  agree=0.722, adj=0.310, (0 split)
+      X4 &lt; 0.7281971   to the left,  agree=0.708, adj=0.276, (0 split)
+
+Node number 4: 67 observations
+  mean=-0.5504389, MSE=1.339999 
+
+Node number 5: 29 observations
+  mean=1.116756, MSE=1.032152 
+
+Node number 6: 86 observations,    complexity param=0.02067114
+  mean=2.89111, MSE=1.984277 
+  left son=12 (66 obs) right son=13 (20 obs)
+  Primary splits:
+      X1 &lt; 0.6788651   to the left,  improve=0.22156300, (0 missing)
+      X2 &lt; -0.6461858  to the left,  improve=0.18349230, (0 missing)
+      X3 &lt; 0.3337678   to the left,  improve=0.07177039, (0 missing)
+      X4 &lt; -0.6901304  to the left,  improve=0.07147937, (0 missing)
+  Surrogate splits:
+      X3 &lt; 1.306227    to the left,  agree=0.791, adj=0.1, (0 split)
+
+Node number 7: 58 observations,    complexity param=0.03312631
+  mean=5.972508, MSE=2.545232 
+  left son=14 (19 obs) right son=15 (39 obs)
+  Primary splits:
+      X1 &lt; 0.5487777   to the left,  improve=0.4104414, (0 missing)
+      X2 &lt; 1.284502    to the left,  improve=0.3764514, (0 missing)
+      X3 &lt; 0.64023     to the left,  improve=0.1446203, (0 missing)
+      X4 &lt; 0.5195383   to the left,  improve=0.1065470, (0 missing)
+  Surrogate splits:
+      X4 &lt; 0.1602244   to the left,  agree=0.759, adj=0.263, (0 split)
+      X3 &lt; -0.4101765  to the left,  agree=0.707, adj=0.105, (0 split)
+
+Node number 12: 66 observations,    complexity param=0.01987992
+  mean=2.52611, MSE=1.634518 
+  left son=24 (37 obs) right son=25 (29 obs)
+  Primary splits:
+      X2 &lt; 0.1420471   to the left,  improve=0.33706550, (0 missing)
+      X3 &lt; 0.7950633   to the left,  improve=0.07418237, (0 missing)
+      X4 &lt; -0.7620964  to the left,  improve=0.07367549, (0 missing)
+      X1 &lt; 0.202155    to the left,  improve=0.06774626, (0 missing)
+  Surrogate splits:
+      X3 &lt; -0.07669569 to the left,  agree=0.652, adj=0.207, (0 split)
+      X1 &lt; -0.03456467 to the right, agree=0.591, adj=0.069, (0 split)
+      X4 &lt; 0.7481645   to the left,  agree=0.576, adj=0.034, (0 split)
+
+Node number 13: 20 observations
+  mean=4.095609, MSE=1.248018 
+
+Node number 14: 19 observations
+  mean=4.508159, MSE=1.691793 
+
+Node number 15: 39 observations,    complexity param=0.01193845
+  mean=6.685909, MSE=1.4074 
+  left son=30 (11 obs) right son=31 (28 obs)
+  Primary splits:
+      X2 &lt; 0.9883665   to the left,  improve=0.39783150, (0 missing)
+      X1 &lt; 1.190038    to the left,  improve=0.18917110, (0 missing)
+      X3 &lt; 0.4410145   to the left,  improve=0.14366120, (0 missing)
+      X4 &lt; 0.7637458   to the right, improve=0.02763798, (0 missing)
+  Surrogate splits:
+      X3 &lt; 0.1215273   to the left,  agree=0.795, adj=0.273, (0 split)
+      X4 &lt; 1.665356    to the right, agree=0.744, adj=0.091, (0 split)
+
+Node number 24: 37 observations
+  mean=1.868981, MSE=1.091084 
+
+Node number 25: 29 observations
+  mean=3.364515, MSE=1.074002 
+
+Node number 30: 11 observations
+  mean=5.492083, MSE=0.8445061 
+
+Node number 31: 28 observations
+  mean=7.154912, MSE=0.8486653 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Display linear regression model summary using kableExtra</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>linear_summary <span class="ot">&lt;-</span> <span class="fu">summary</span>(linear_model)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Display decision tree model summary</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>tree_summary <span class="ot">&lt;-</span> <span class="fu">summary</span>(tree_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Call:
+rpart(formula = Y ~ ., data = train_data, method = "anova")
+  n= 240 
+
+          CP nsplit rel error    xerror       xstd
+1 0.54997276      0 1.0000000 1.0057093 0.07513055
+2 0.17981516      1 0.4500272 0.5183794 0.04043374
+3 0.03312631      2 0.2702121 0.3261017 0.02839097
+4 0.03075679      3 0.2370858 0.3057193 0.02639404
+5 0.02067114      4 0.2063290 0.2473445 0.02244488
+6 0.01987992      5 0.1856578 0.2499782 0.02174300
+7 0.01193845      6 0.1657779 0.2357704 0.02084311
+8 0.01000000      7 0.1538395 0.2310490 0.02059688
+
+Variable importance
+X1 X2 X3 X4 
+39 28 17 16 
+
+Node number 1: 240 observations,    complexity param=0.5499728
+  mean=2.460614, MSE=7.621179 
+  left son=2 (96 obs) right son=3 (144 obs)
+  Primary splits:
+      X1 &lt; -0.1520619  to the left,  improve=0.5499728, (0 missing)
+      X2 &lt; 0.5711715   to the left,  improve=0.5159892, (0 missing)
+      X3 &lt; 0.1208541   to the left,  improve=0.2968321, (0 missing)
+      X4 &lt; -0.07148916 to the left,  improve=0.2886611, (0 missing)
+  Surrogate splits:
+      X2 &lt; -0.3762551  to the left,  agree=0.779, adj=0.448, (0 split)
+      X3 &lt; -0.2387109  to the left,  agree=0.758, adj=0.396, (0 split)
+      X4 &lt; -0.3551359  to the left,  agree=0.754, adj=0.385, (0 split)
+
+Node number 2: 96 observations,    complexity param=0.03075679
+  mean=-0.04680701, MSE=1.833011 
+  left son=4 (67 obs) right son=5 (29 obs)
+  Primary splits:
+      X2 &lt; -0.2476466  to the left,  improve=0.3196967, (0 missing)
+      X1 &lt; -0.8322406  to the left,  improve=0.2236104, (0 missing)
+      X4 &lt; -0.4008152  to the left,  improve=0.1813125, (0 missing)
+      X3 &lt; -0.904785   to the left,  improve=0.1080443, (0 missing)
+  Surrogate splits:
+      X3 &lt; 0.2833611   to the left,  agree=0.781, adj=0.276, (0 split)
+      X1 &lt; -0.3992759  to the left,  agree=0.760, adj=0.207, (0 split)
+      X4 &lt; -0.09476738 to the left,  agree=0.750, adj=0.172, (0 split)
+
+Node number 3: 144 observations,    complexity param=0.1798152
+  mean=4.132228, MSE=4.494223 
+  left son=6 (86 obs) right son=7 (58 obs)
+  Primary splits:
+      X2 &lt; 0.7020045   to the left,  improve=0.5082093, (0 missing)
+      X1 &lt; 0.5961358   to the left,  improve=0.4199056, (0 missing)
+      X3 &lt; 1.187476    to the left,  improve=0.2117912, (0 missing)
+      X4 &lt; 0.7281971   to the left,  improve=0.1454059, (0 missing)
+  Surrogate splits:
+      X1 &lt; 0.5961358   to the left,  agree=0.722, adj=0.310, (0 split)
+      X3 &lt; 1.00385     to the left,  agree=0.722, adj=0.310, (0 split)
+      X4 &lt; 0.7281971   to the left,  agree=0.708, adj=0.276, (0 split)
+
+Node number 4: 67 observations
+  mean=-0.5504389, MSE=1.339999 
+
+Node number 5: 29 observations
+  mean=1.116756, MSE=1.032152 
+
+Node number 6: 86 observations,    complexity param=0.02067114
+  mean=2.89111, MSE=1.984277 
+  left son=12 (66 obs) right son=13 (20 obs)
+  Primary splits:
+      X1 &lt; 0.6788651   to the left,  improve=0.22156300, (0 missing)
+      X2 &lt; -0.6461858  to the left,  improve=0.18349230, (0 missing)
+      X3 &lt; 0.3337678   to the left,  improve=0.07177039, (0 missing)
+      X4 &lt; -0.6901304  to the left,  improve=0.07147937, (0 missing)
+  Surrogate splits:
+      X3 &lt; 1.306227    to the left,  agree=0.791, adj=0.1, (0 split)
+
+Node number 7: 58 observations,    complexity param=0.03312631
+  mean=5.972508, MSE=2.545232 
+  left son=14 (19 obs) right son=15 (39 obs)
+  Primary splits:
+      X1 &lt; 0.5487777   to the left,  improve=0.4104414, (0 missing)
+      X2 &lt; 1.284502    to the left,  improve=0.3764514, (0 missing)
+      X3 &lt; 0.64023     to the left,  improve=0.1446203, (0 missing)
+      X4 &lt; 0.5195383   to the left,  improve=0.1065470, (0 missing)
+  Surrogate splits:
+      X4 &lt; 0.1602244   to the left,  agree=0.759, adj=0.263, (0 split)
+      X3 &lt; -0.4101765  to the left,  agree=0.707, adj=0.105, (0 split)
+
+Node number 12: 66 observations,    complexity param=0.01987992
+  mean=2.52611, MSE=1.634518 
+  left son=24 (37 obs) right son=25 (29 obs)
+  Primary splits:
+      X2 &lt; 0.1420471   to the left,  improve=0.33706550, (0 missing)
+      X3 &lt; 0.7950633   to the left,  improve=0.07418237, (0 missing)
+      X4 &lt; -0.7620964  to the left,  improve=0.07367549, (0 missing)
+      X1 &lt; 0.202155    to the left,  improve=0.06774626, (0 missing)
+  Surrogate splits:
+      X3 &lt; -0.07669569 to the left,  agree=0.652, adj=0.207, (0 split)
+      X1 &lt; -0.03456467 to the right, agree=0.591, adj=0.069, (0 split)
+      X4 &lt; 0.7481645   to the left,  agree=0.576, adj=0.034, (0 split)
+
+Node number 13: 20 observations
+  mean=4.095609, MSE=1.248018 
+
+Node number 14: 19 observations
+  mean=4.508159, MSE=1.691793 
+
+Node number 15: 39 observations,    complexity param=0.01193845
+  mean=6.685909, MSE=1.4074 
+  left son=30 (11 obs) right son=31 (28 obs)
+  Primary splits:
+      X2 &lt; 0.9883665   to the left,  improve=0.39783150, (0 missing)
+      X1 &lt; 1.190038    to the left,  improve=0.18917110, (0 missing)
+      X3 &lt; 0.4410145   to the left,  improve=0.14366120, (0 missing)
+      X4 &lt; 0.7637458   to the right, improve=0.02763798, (0 missing)
+  Surrogate splits:
+      X3 &lt; 0.1215273   to the left,  agree=0.795, adj=0.273, (0 split)
+      X4 &lt; 1.665356    to the right, agree=0.744, adj=0.091, (0 split)
+
+Node number 24: 37 observations
+  mean=1.868981, MSE=1.091084 
+
+Node number 25: 29 observations
+  mean=3.364515, MSE=1.074002 
+
+Node number 30: 11 observations
+  mean=5.492083, MSE=0.8445061 
+
+Node number 31: 28 observations
+  mean=7.154912, MSE=0.8486653 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"Decision Tree Model Summary:"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Decision Tree Model Summary:"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(tree_summary<span class="sc">$</span>splits)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   count ncat    improve       index        adj
+X1   240   -1 0.54997276 -0.15206190 0.00000000
+X2   240   -1 0.51598924  0.57117154 0.00000000
+X3   240   -1 0.29683212  0.12085413 0.00000000
+X4   240   -1 0.28866113 -0.07148916 0.00000000
+X2     0   -1 0.77916667 -0.37625507 0.44791667
+X3     0   -1 0.75833333 -0.23871092 0.39583333
+X4     0   -1 0.75416667 -0.35513593 0.38541667
+X2    96   -1 0.31969666 -0.24764657 0.00000000
+X1    96   -1 0.22361036 -0.83224062 0.00000000
+X4    96   -1 0.18131247 -0.40081515 0.00000000
+X3    96   -1 0.10804433 -0.90478499 0.00000000
+X3     0   -1 0.78125000  0.28336110 0.27586207
+X1     0   -1 0.76041667 -0.39927594 0.20689655
+X4     0   -1 0.75000000 -0.09476738 0.17241379
+X2   144   -1 0.50820930  0.70200451 0.00000000
+X1   144   -1 0.41990565  0.59613581 0.00000000
+X3   144   -1 0.21179123  1.18747565 0.00000000
+X4   144   -1 0.14540589  0.72819711 0.00000000
+X1     0   -1 0.72222222  0.59613581 0.31034483
+X3     0   -1 0.72222222  1.00385016 0.31034483
+X4     0   -1 0.70833333  0.72819711 0.27586207
+X1    86   -1 0.22156296  0.67886512 0.00000000
+X2    86   -1 0.18349234 -0.64618584 0.00000000
+X3    86   -1 0.07177039  0.33376782 0.00000000
+X4    86   -1 0.07147937 -0.69013038 0.00000000
+X3     0   -1 0.79069767  1.30622740 0.10000000
+X2    66   -1 0.33706547  0.14204707 0.00000000
+X3    66   -1 0.07418237  0.79506334 0.00000000
+X4    66   -1 0.07367549 -0.76209643 0.00000000
+X1    66   -1 0.06774626  0.20215498 0.00000000
+X3     0   -1 0.65151515 -0.07669569 0.20689655
+X1     0    1 0.59090909 -0.03456467 0.06896552
+X4     0   -1 0.57575758  0.74816451 0.03448276
+X1    58   -1 0.41044136  0.54877770 0.00000000
+X2    58   -1 0.37645141  1.28450238 0.00000000
+X3    58   -1 0.14462033  0.64023004 0.00000000
+X4    58   -1 0.10654699  0.51953834 0.00000000
+X4     0   -1 0.75862069  0.16022443 0.26315789
+X3     0   -1 0.70689655 -0.41017654 0.10526316
+X2    39   -1 0.39783153  0.98836651 0.00000000
+X1    39   -1 0.18917108  1.19003822 0.00000000
+X3    39   -1 0.14366117  0.44101446 0.00000000
+X4    39    1 0.02763798  0.76374584 0.00000000
+X3     0   -1 0.79487179  0.12152733 0.27272727
+X4     0    1 0.74358974  1.66535587 0.09090909</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Display linear regression model summary</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>linear_summary <span class="ot">&lt;-</span> <span class="fu">summary</span>(linear_model)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">Linear Regression Model Summary:"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "\nLinear Regression Model Summary:"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(linear_summary)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = Y ~ ., data = train_data)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-3.5444 -0.8216 -0.0462  0.7647  4.9136 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  2.51934    0.08004  31.476   &lt;2e-16 ***
+X1           1.46213    0.13025  11.225   &lt;2e-16 ***
+X2           1.40304    0.12716  11.034   &lt;2e-16 ***
+X3           0.04054    0.12353   0.328    0.743    
+X4          -0.07251    0.12161  -0.596    0.552    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 1.239 on 235 degrees of freedom
+Multiple R-squared:  0.8028,    Adjusted R-squared:  0.7995 
+F-statistic: 239.2 on 4 and 235 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualization of decision tree</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(tree_model, <span class="at">uniform =</span> <span class="cn">TRUE</span>, <span class="at">main =</span> <span class="st">"Decision Tree Model"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-1-3.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualization of linear regression</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>))  <span class="co"># Reset the plotting layout</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(train_data<span class="sc">$</span>Y, <span class="fu">predict</span>(linear_model), <span class="at">main =</span> <span class="st">"Linear Regression Model"</span>,</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Actual Y"</span>, <span class="at">ylab =</span> <span class="st">"Predicted Y"</span>)</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a =</span> <span class="dv">0</span>, <span class="at">b =</span> <span class="dv">1</span>, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lty =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-1-4.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p><strong>The linear regression model results indicate a strong fit to the data with a high adjusted R-squared value of 0.7995, suggesting that approximately 79.95% of the variability in the response variable (Y) is explained by the predictor variables (X1, X2, X3, X4). Notably, X1 and X2 demonstrate significant positive coefficients (1.46213 and 1.40304, respectively), indicating their substantial impact on the response. However, the coefficients for X3 and X4 are not statistically significant based on their p-values (0.743 and 0.552, respectively), suggesting a potential lack of influence. The overall model is highly significant (p-value &lt; 2.2e-16), emphasizing its effectiveness in capturing the relationships within the data.</strong></p>
+
+
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">Made with <a href="https://quarto.org/">Sai manikanta praneeth perala</a></div>   
+    <div class="nav-footer-center"><a href="mailto:Sai%20.Saimanikantapraneeperala@my.unt.edu">Contact Sai manikanta praneeth perala</a></div>
+    <div class="nav-footer-right"><a href="https://github.com">Github Code Repo</a></div>
+  </div>
+</footer>
+
+
+
+</body></html>

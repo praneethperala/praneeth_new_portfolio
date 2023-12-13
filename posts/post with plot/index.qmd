@@ -1,0 +1,68 @@
+---
+title: "Machine learning model visualization"
+author: "Sai manikanta praneeth perala"
+date: "2023-12-06"
+categories: [news, code, analysis,plotly,plot]
+image: "image.jpg"
+---
+
+***This R code utilizes ggplot2, corrplot, caret, and Metrics to analyze a synthetic dataset. It starts with summary statistics, visualizes relationships with scatter plots, and depicts correlations using a color-coded matrix. The main focus is on a linear regression model predicting 'mpg' based on 'wt.' The model's summary and evaluation metrics, including RMSE, are provided. The ggplot2 package is then used to visualize the regression line on a scatter plot of 'wt' versus 'mpg,' offering a concise exploration of the dataset and the linear regression model.***
+
+```{r}
+# Load necessary libraries
+library(ggplot2)
+library(corrplot)
+library(caret)
+library(Metrics)
+
+# Create a dataframe with random values
+set.seed(123)
+n <- 100
+random_df <- data.frame(
+  mpg = rnorm(n, mean = 25, sd = 5),
+  wt = rnorm(n, mean = 3, sd = 1),
+  disp = rnorm(n, mean = 200, sd = 50),
+  hp = rnorm(n, mean = 120, sd = 30)
+)
+
+# EDA: Summary statistics and structure of the dataset
+summary(random_df)
+str(random_df)
+
+
+# Scatter plots for selected relationships
+pairs(random_df, col = "#FFA500")
+
+# Correlation matrix visualization
+correlation_matrix <- cor(random_df)
+corrplot(correlation_matrix, method = "color", col = colorRampPalette(c("#B2DF8A", "#1F78B4"))(20))
+
+# Linear Regression Model
+# Assume mpg as the dependent variable and wt as the independent variable
+model <- lm(mpg ~ wt, data = random_df)
+
+# Model summary
+summary(model)
+
+# Predictions
+predictions <- predict(model, random_df)
+
+# Model evaluation
+rmse_value <- rmse(predictions, random_df$mpg)
+cat("Root Mean Squared Error (RMSE):", rmse_value, "\n")
+
+# Visualization of the linear regression line
+ggplot(random_df, aes(x = wt, y = mpg)) +
+  geom_point(color = "#FFA500", size = 3) +
+  geom_smooth(method = "lm", se = FALSE, color = "#E41A1C", linetype = "dashed", size = 1.5) +
+  labs(title = "Linear Regression: MPG vs Weight",
+       x = "Weight", y = "Miles per Gallon") +
+  theme_minimal() +
+  theme(plot.title = element_text(color = "#4DAF4A", size = 16, face = "bold"),
+        axis.title.x = element_text(color = "#377EB8", size = 14),
+        axis.title.y = element_text(color = "#FF7F00", size = 14),
+        axis.text = element_text(color = "#333333", size = 12),
+        legend.position = "none")
+
+
+```

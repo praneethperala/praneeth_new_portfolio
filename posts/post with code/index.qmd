@@ -1,0 +1,104 @@
+---
+title: "Linear regression analysis"
+author: "Sai manikanta praneeth perala"
+date: "2023-12-06"
+categories: [news, code, analysis]
+image: "image.jpg"
+---
+
+***The R code generates a complex dataset, trains a decision tree, and a linear regression model. It then visualizes the models, displays their summaries, and provides alternative visualizations without using kableExtra.***
+
+```{r}
+# Install and load necessary packages
+if (!requireNamespace("MASS", quietly = TRUE)) {
+  install.packages("MASS")
+}
+if (!requireNamespace("rpart", quietly = TRUE)) {
+  install.packages("rpart")
+}
+if (!requireNamespace("rpart.plot", quietly = TRUE)) {
+  install.packages("rpart.plot")
+}
+if (!requireNamespace("ggplot2", quietly = TRUE)) {
+  install.packages("ggplot2")
+}
+if (!requireNamespace("kableExtra", quietly = TRUE)) {
+  install.packages("kableExtra")
+}
+if (!requireNamespace("caret", quietly = TRUE)) {
+  install.packages("caret")
+}
+
+library(MASS)
+library(rpart)
+library(rpart.plot)
+library(ggplot2)
+library(kableExtra)
+library(caret)
+
+# Set seed for reproducibility
+set.seed(123)
+
+# Function to generate complex data
+generate_complex_data <- function(n) {
+  mu <- rep(0, 5)
+  Sigma <- matrix(0.7, nrow = 5, ncol = 5)
+  diag(Sigma) <- 1
+  data <- mvrnorm(n, mu, Sigma)
+  data <- as.data.frame(data)
+  names(data) <- c("X1", "X2", "X3", "X4", "Y")
+  data$Y <- 2*sin(data$X1) + 3*log(1 + exp(data$X2)) + rnorm(n)
+  return(data)
+}
+
+# Generate complex data
+data <- generate_complex_data(300)
+
+# Split the dataset into training and testing sets
+train_index <- createDataPartition(data$Y, p = 0.8, list = FALSE)
+train_data <- data[train_index, ]
+test_data <- data[-train_index, ]
+
+# Decision tree model
+tree_model <- rpart(Y ~ ., data = train_data, method = "anova")
+
+# Linear regression model
+linear_model <- lm(Y ~ ., data = train_data)
+
+# Visualize decision tree
+rpart.plot(tree_model, main = "Decision Tree Model", extra = 101, under = TRUE, compress = TRUE)
+
+# Visualize linear regression
+ggplot(train_data, aes(x = Y, y = predict(linear_model))) +
+  geom_point() +
+  geom_abline(intercept = 0, slope = 1, linetype = "dashed", color = "red") +
+  ggtitle("Linear Regression Model")
+
+# Display decision tree model summary using kableExtra
+tree_summary <- summary(tree_model)
+
+# Display linear regression model summary using kableExtra
+linear_summary <- summary(linear_model)
+
+# Display decision tree model summary
+tree_summary <- summary(tree_model)
+print("Decision Tree Model Summary:")
+print(tree_summary$splits)
+
+# Display linear regression model summary
+linear_summary <- summary(linear_model)
+print("\nLinear Regression Model Summary:")
+print(linear_summary)
+
+# Visualization of decision tree
+plot(tree_model, uniform = TRUE, main = "Decision Tree Model")
+
+# Visualization of linear regression
+par(mfrow = c(1, 1))  # Reset the plotting layout
+plot(train_data$Y, predict(linear_model), main = "Linear Regression Model",
+     xlab = "Actual Y", ylab = "Predicted Y")
+abline(a = 0, b = 1, col = "red", lty = 2)
+
+```
+
+**The linear regression model results indicate a strong fit to the data with a high adjusted R-squared value of 0.7995, suggesting that approximately 79.95% of the variability in the response variable (Y) is explained by the predictor variables (X1, X2, X3, X4). Notably, X1 and X2 demonstrate significant positive coefficients (1.46213 and 1.40304, respectively), indicating their substantial impact on the response. However, the coefficients for X3 and X4 are not statistically significant based on their p-values (0.743 and 0.552, respectively), suggesting a potential lack of influence. The overall model is highly significant (p-value \< 2.2e-16), emphasizing its effectiveness in capturing the relationships within the data.**
